@@ -30,29 +30,29 @@ start.addEventListener("click", function () {
 //questions, answers, and solutions stored in a variable 
 var questions = [
     {
-        question: "this is question 1",
-        mC: ["answer 1", "answer 2", "answer 3", "answer 4"],
-        correct: "answer 1"
+        question: "What does HTML stand for?",
+        mC: ["Hyper Text Markup Language", "Happy to meet ladies", "Hidden task markup location", "Happy to make lines"],
+        correct: "Hyper Text Markup Language"
     },
     {
-        question: "this is question 2",
-        mC: ["answer 1", "answer 2", "answer 3", "answer 4"],
-        correct: "answer 1"
+        question: "What does an event listener do?",
+        mC: ["nothing", "links a button to an event", "links html to JS", "links HTML to CSS"],
+        correct: "links a button to an event"
     },
     {
-        question: "this is question 3",
-        mC: ["answer 1", "answer 2", "answer 3", "answer 4"],
-        correct: "answer 1"
+        question: "What does CSS do on a website?",
+        mC: ["Inputs text to webpage", "Makes the webpage go super saiyan 2", "styles the website", "Inputs functionality to webpage"],
+        correct: "styles the website"
     },
     {
-        question: "this is question 4",
-        mC: ["answer 1", "answer 2", "answer 3", "answer 4"],
-        correct: "answer 1"
+        question: "What does a variable do?",
+        mC: ["stores styling properties", "declares an object", "Adds a click event", "It does my taxes"],
+        correct: "declares an object"
     },
     {
-        question: "this is question 5",
-        mC: ["answer 1", "answer 2", "answer 3", "answer 4"],
-        correct: "answer 1"
+        question: "What is Vegeta's final form?",
+        mC: ["Susano", "Super Saiyan", "Ultra Instinct", "Ultra Ego"],
+        correct: "Ultra Ego"
     }
 ]
 //displays questions and answers in the order stored above
@@ -91,9 +91,62 @@ function correct(event) {
     }
 }
 
+//ends quiz for user
 function endQuiz() {
+    answers.innerHTML = ""
     questionIndex = 0
     question.innerHTML = "Your Score is " + score + "!"
-    
-
+    //creates an h1 element
+    const createheader = document.createElement("h1")
+    //gives our const an id
+    createheader.id = "createheader"
+    createheader.textContent = "Congrats! You finished!"
+    quizContainer.appendChild(createheader)
+    //creates a p tag
+    const createparagraph = document.createElement("p");
+    createparagraph.id = "createparagraph"
+    quizContainer.appendChild(createparagraph)
 }
+//creates an input to put your initials
+const scoreboard = document.createElement("label")
+scoreboard.id = "createScoreboard"
+scoreboard.textcontent = "What are your initials?"
+quizContainer.appendChild(scoreboard)
+// allows user to input initials... creates input element
+const Initials = document.createElement("input")
+Initials.type = "text"
+Initials.id = "initials"
+// creates an empty string for the user to be able to input initials
+Initials.textContent = ""
+quizContainer.appendChild(Initials)
+//creates button to submit initials
+const SavedInit = document.createElement("button")
+SavedInit.type = "Submit"
+SavedInit.id = "Submit"
+SavedInit.textContent = "Submit"
+quizContainer.appendChild(SavedInit)
+//stores our scores and variables in local storage
+SavedInit.addEventListener("click", function () {
+    var FirstLast = Initials.value;
+    //gives message if nothing is inputed
+    if (FirstLast === "") {
+        console.log("Please try again!");
+    } else {
+        //lists final score 
+        var finalScore = {
+            Firstlast: FirstLast
+        }
+        console.log(finalScore)
+        var scoreList = localStorage.getItem("scoreList")
+        if (scoreList === null) {
+            scoreList = []
+        } else {
+            scoreList = JSON.parse(scoreList)
+        }
+        scoreList.push(finalScore)
+        var UpdatedScore = JSON.stringify(scoreList)
+        localStorage.setItem("scoreList", UpdatedScore)
+        window.location.replace("scores.html")
+    }
+})
+

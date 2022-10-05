@@ -9,6 +9,7 @@ var time = 60
 var interval = 0
 var questionIndex = 0
 var score = 0
+let userHighScores = ""
 // hides the quiz container on the homescreen
 quizContainer.style.display = "none"
 //starts the timer for the quiz as well as displays the quiz container for user to start
@@ -31,7 +32,7 @@ start.addEventListener("click", function () {
 var questions = [
     {
         question: "What does HTML stand for?",
-        mC: ["Hyper Text Markup Language", "Happy to meet ladies", "Hidden task markup location", "Happy to make lines"],
+        mC: ["Hyper Text Markup Language", "Hyper tax media language", "Hidden task markup location", "Happy to make lines"],
         correct: "Hyper Text Markup Language"
     },
     {
@@ -106,6 +107,13 @@ function endQuiz() {
     const createparagraph = document.createElement("p");
     createparagraph.id = "createparagraph"
     quizContainer.appendChild(createparagraph)
+    var temp = JSON.parse(localStorage.getItem("scoreList"))
+    console.log(temp)
+    const Highscore = document.createElement("div")
+
+    temp.forEach((user) => userHighScores += `<p>name: ${user.Firstlast}, score: ${user.score}</p>`)
+    Highscore.innerHTML = userHighScores
+    quizContainer.appendChild(Highscore)
 }
 //creates an input to put your initials
 const scoreboard = document.createElement("label")
@@ -114,17 +122,20 @@ scoreboard.textcontent = "What are your initials?"
 quizContainer.appendChild(scoreboard)
 // allows user to input initials... creates input element
 const Initials = document.createElement("input")
+
 Initials.type = "text"
 Initials.id = "initials"
 // creates an empty string for the user to be able to input initials
 Initials.textContent = ""
 quizContainer.appendChild(Initials)
+
 //creates button to submit initials
 const SavedInit = document.createElement("button")
 SavedInit.type = "Submit"
 SavedInit.id = "Submit"
 SavedInit.textContent = "Submit"
 quizContainer.appendChild(SavedInit)
+
 //stores our scores and variables in local storage
 SavedInit.addEventListener("click", function () {
     var FirstLast = Initials.value;
@@ -134,7 +145,8 @@ SavedInit.addEventListener("click", function () {
     } else {
         //lists final score 
         var finalScore = {
-            Firstlast: FirstLast
+            Firstlast: FirstLast,
+            score
         }
         console.log(finalScore)
         var scoreList = localStorage.getItem("scoreList")
@@ -143,10 +155,16 @@ SavedInit.addEventListener("click", function () {
         } else {
             scoreList = JSON.parse(scoreList)
         }
+        scoreList = scoreList.map((user) => {
+            if (user.Firstlast === FirstLast) {
+                user.score = score
+            }
+            return user
+        })
         scoreList.push(finalScore)
         var UpdatedScore = JSON.stringify(scoreList)
         localStorage.setItem("scoreList", UpdatedScore)
-        window.location.replace("scores.html")
+        var temp = JSON.parse(localStorage.getItem("scoreList"))
     }
 })
 
